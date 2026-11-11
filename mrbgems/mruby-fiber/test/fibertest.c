@@ -59,6 +59,14 @@ fiber_transfer_by_c(mrb_state *mrb, mrb_value self)
 }
 
 static mrb_value
+fiber_s_new_by_c(mrb_state *mrb, mrb_value self)
+{
+  mrb_value b;
+  mrb_get_args(mrb, "&!", &b);
+  return mrb_fiber_new(mrb, mrb_proc_ptr(b));
+}
+
+static mrb_value
 proc_s_c_tunnel(mrb_state *mrb, mrb_value self)
 {
   mrb_value b;
@@ -88,6 +96,7 @@ mrb_mruby_fiber_gem_test(mrb_state *mrb)
   mrb_define_method(mrb, fiber_class, "resume_by_c_func", fiber_resume_by_c_func, MRB_ARGS_NONE());
   mrb_define_method(mrb, fiber_class, "resume_by_c_method", fiber_resume_by_c_method, MRB_ARGS_NONE());
   mrb_define_method(mrb, fiber_class, "transfer_by_c", fiber_transfer_by_c, MRB_ARGS_NONE());
+  mrb_define_class_method(mrb, fiber_class, "new_by_c", fiber_s_new_by_c, MRB_ARGS_NONE() | MRB_ARGS_BLOCK());
 
   mrb_define_class_method(mrb, mrb->proc_class, "c_tunnel", proc_s_c_tunnel, MRB_ARGS_NONE() | MRB_ARGS_BLOCK());
 
